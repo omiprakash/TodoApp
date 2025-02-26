@@ -1,15 +1,21 @@
 'use client'
 import Image from "next/image";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+
+interface Task {
+  id: number;
+  text: string;
+  completed: boolean;
+}
 
 const Todo = () => {
 
-  const [task, setTask] = useState([])
+  const [task, setTask] = useState<Task[]>([]);
   const [filter, setFilter] = useState('All')
   const [newTask, setNewTask] = useState('')
 
   useEffect(() => {
-      const storedTask = JSON.parse(localStorage.getItem('tasks')) || [];
+      const storedTask = localStorage.getItem('tasks') !== null ? JSON.parse(localStorage.getItem('tasks')!) : [];
       setTask(storedTask)
   }, [])
 
@@ -32,12 +38,12 @@ const Todo = () => {
     }
   }
 
-  const toggleTask = (id) => {
+  const toggleTask = (id: number) => {
     const updatedTask = task.map(task => task.id === id ? { ...task, completed: !task.completed} : task)
     setTask(updatedTask)
   }
 
-  const onDeleteTask = (id) => {
+  const onDeleteTask = (id: number) => {
     const updatedTask = task.filter(task => task.id !== id )
     setTask(updatedTask)
   }
